@@ -2,10 +2,48 @@ const express = require('express');
 
 const router = express.Router();
 
-const authController = require('../controllers/auth');
+// Load Controller
+const {
+    registerUser,
+    loginUser,
+    getCurrentUser,
+    getForgotPassword,
+    resetPassword,
+    updateCurrentUserDetails,
+    updateCurrentPassword,
+    logout
+} = require('../controllers/AuthController');
 
-router.post('/signup', authController.signUp);
+// Protect Routes
+const { protectRoutes } = require('../middleware/auth');
 
-router.post('/login', authController.getlogin);
+router
+    .route('/register')
+    .post(registerUser);
 
-module.exports = router;
+router
+    .route('/login')
+    .post(loginUser);
+
+router
+    .route('/logout')
+    .get(logout);
+
+router
+    .route('/me')
+    .get(protectRoutes, getCurrentUser)
+    .put(protectRoutes, updateCurrentUserDetails);
+
+router
+    .route('/me/user-password')
+    .put(protectRoutes, updateCurrentPassword);
+
+router
+    .route('/forgot-password')
+    .post(getForgotPassword);
+
+router
+    .route('/resetPassword/:resetPasswordToken')
+    .put(resetPassword);
+
+module.exports  = router;

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from './../../services/posts.service';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { Post } from 'src/app/models/posts.model';
-import { mimeType } from './mime-type.validator';
+// import { mimeType } from './mime-type.validator';
 
 @Component({
   selector: 'app-post-create',
@@ -14,27 +14,25 @@ export class PostCreateComponent implements OnInit {
   enteredTitle = '';
   enteredContent = '';
   isLoading = false;
-  form: FormGroup;
+  form!: FormGroup;
   private mode = 'create';
   private postId: any;
   post: any;
   imagePreview: any;
 
-  constructor(private postService: PostService, private route: ActivatedRoute) { }
+  constructor(private postService: PostService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      'title': new FormControl('', {validators: [Validators.required, Validators.minLength(3)]}),
-      'content': new FormControl('', {validators: [Validators.required]}),
-      'image': new FormControl('', {validators: [Validators.required]})
-    });
+
+    this.initializeForm();
 
     this.route.paramMap.subscribe((params: ParamMap) => {
       if(params.has('postId')){
         this.mode = 'edit';
         this.postId = params.get('postId');
         this.isLoading = true;
-        this.postService.getPostById(this.postId).subscribe(data => {
+        this.postService.getPostById(this.postId).subscribe((postData: any) => {
+          const data = postData.data;
           this.isLoading = false;
           this.post = {
             id: data._id,
@@ -54,16 +52,24 @@ export class PostCreateComponent implements OnInit {
     })
   }
 
-  onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.form.patchValue({image: file});
-    this.form.get('image').updateValueAndValidity();
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result;
-    }
-    reader.readAsDataURL(file);
+  initializeForm() {
+    this.form = this.fb.group({
+      'title': new FormControl('', {validators: [Validators.required, Validators.minLength(3)]}),
+      'content': new FormControl('', {validators: [Validators.required]}),
+      //'image': new FormControl('', {validators: [Validators.required]})
+    });
   }
+
+  // onImagePicked(event: Event) {
+  //   const file = (event.target as HTMLInputElement).files[0];
+  //   this.form.patchValue({image: file});
+  //   this.form.get('image').updateValueAndValidity();
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     this.imagePreview = reader.result;
+  //   }
+  //   reader.readAsDataURL(file);
+  // }
 
   onSavePost(){
     if(this.form.invalid){

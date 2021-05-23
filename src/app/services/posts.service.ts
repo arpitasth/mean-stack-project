@@ -15,10 +15,10 @@ export class PostService {
   constructor(private http: HttpClient, private router: Router){}
 
   getPost() {
-    this.http.get<{message: string, posts: any}>(
+    this.http.get<{message: string, data: any}>(
       'http://localhost:3000/api/posts'
       ).pipe(map(postData => {
-        return postData.posts.map((post: any) => {
+        return postData.data.map((post: any) => {
           return {
             title: post.title,
             content: post.content,

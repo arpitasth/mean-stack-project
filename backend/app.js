@@ -2,22 +2,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const colors = require('colors');
+const morgan = require('morgan');
+
+const connectDB = require('./config/database');
+const errorHandler  = require('./middleware/error');
+
+// Connect DB
+connectDB();
 
 const app = express();
 const postRoutes = require('./routes/posts');
 const authRoutes = require('./routes/auth');
 
-const DB_URI = 'mongodb+srv://arpit:9140632261@cluster0.ttapc.mongodb.net/demo-project?retryWrites=true&w=majority'
-
-mongoose.connect(DB_URI, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  useCreateIndex: true
-}).then((res) => {
-  console.log('You are connected with DB'.yellow.bold)
-}).catch(error => {
-  console.log(error.red.bold);
-});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -35,7 +31,12 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(morgan('dev'));
+
+app.use('/api/auth',authRoutes);
 app.use('/api/posts',postRoutes);
-app.use('/api/user',authRoutes);
+
+
+app.use(errorHandler);
 
 module.exports = app;

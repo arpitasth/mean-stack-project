@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from './../services/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,13 +8,25 @@ import { Router } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
-  isLoggedIn: boolean = false;
+export class HeaderComponent implements OnInit, OnDestroy {
+  isAuthenticated: boolean = false;
+  private authListener : Subscription;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.authListener = this.authService.getAuthStatus()
+    .subscribe(userAuthenticated => {
+      this.isAuthenticated = userAuthenticated;
+    });
+  }
 
+  onLogOut(){
+    this.authService.logout();
+  }
+
+  ngOnDestroy(){
+    this.authListener.unsubscribe();
   }
 
 }

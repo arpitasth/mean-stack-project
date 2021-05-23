@@ -18,7 +18,11 @@ const port = normalizePort(process.env.port || 3000);
 app.set('port', port);
 
 const server = http.createServer(app);
-server.listen(port);
+
+server.listen(
+  port,
+  console.log(`Server is running in development on port ${port}`.yellow.bold)
+);
 
 
 

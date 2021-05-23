@@ -9,6 +9,14 @@ const postSchema = mongoose.Schema({
   content: {
     type: String,
     required: true
+  },
+  postPictures: [
+    {img: { type: String } }
+  ],
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true
   }
 });
 

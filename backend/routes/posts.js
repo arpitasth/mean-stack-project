@@ -1,18 +1,39 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const { nanoid } = require('nanoid');
 
-const postController = require('../controllers/posts');
-const checkAuth = require('../middleware/check-auth');
+const {
+  getPosts,
+  addPost,
+  getPostById,
+  updatePost,
+  deletePost
+} = require('../controllers/PostsController');
+const { protectRoutes } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('', checkAuth, postController.addProduct);
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(path.dirname(__dirname), 'uploads'))
+  },
+  filename: function (req, file, cb) {
+    cb(null, nanoid() + '-' + Date.now() + '-' + file.originalname)
+  }
+})
 
-router.get('',  postController.getProducts);
+const upload = multer({ storage })
 
-router.get('/:id', checkAuth, postController.getProductById);
+router
+  .route('')
+    .get(getPosts)
+    .post(protectRoutes, upload.array('postPictures'), addPost);
 
-router.put('/:postId', checkAuth, postController.getUpdate);
-
-router.delete('/:postId', checkAuth, postController.getDelete);
+router
+  .route('/:id')
+    .get(getPostById)
+    .put(protectRoutes, updatePost)
+    .delete(protectRoutes, deletePost)
 
 module.exports = router;
