@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+/**
+ * URL to connect MongoDb Database
+ */
 MONGO_URI = 'mongodb+srv://arpit:9140632261@cluster0.ttapc.mongodb.net/demo-project?retryWrites=true&w=majority'
 
 const connectDB = async () => {

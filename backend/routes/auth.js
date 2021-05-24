@@ -1,22 +1,15 @@
 const express = require('express');
-
 const router = express.Router();
 
 // Load Controller
 const {
     registerUser,
-    loginUser,
-    getCurrentUser,
-    getForgotPassword,
-    resetPassword,
-    updateCurrentUserDetails,
-    updateCurrentPassword,
-    logout
+    loginUser
 } = require('../controllers/AuthController');
 
-// Protect Routes
-const { protectRoutes } = require('../middleware/auth');
-
+/**
+ *  Routes For register & login the user
+ */
 router
     .route('/register')
     .post(registerUser);
@@ -24,6 +17,5 @@ router
 router
     .route('/login')
     .post(loginUser);
-
 
 module.exports  = router;

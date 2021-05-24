@@ -16,6 +16,9 @@ export class PostService {
 
   constructor(private http: HttpClient, private router: Router){}
 
+  /**
+   *  Utilizing the API & subscribing the response for all posts
+   */
   getPost() {
     this.http.get<{message: string, data: any}>(
       `${this.baseurl}`
@@ -36,26 +39,38 @@ export class PostService {
       });
   }
 
+  /**
+   *  Setting up an observable to update the posts
+   */
   getPostUpdateListener(){
     return this.postUpdated.asObservable();
   }
 
+  /**
+   *  Getting posts by Post Id
+   */
   getPostById(id: string){
     return this.http.get<{_id:string, title:string, content: string }>(
       `${this.baseurl}/`+id
     );
   }
 
+  /**
+   *  Getting posts by User Id
+   */
   getPostByUserId(userId: string){
     return this.http.get<{_id:string, title:string, content: string }>(
        `${this.baseurl}/my-posts/`+userId
     );
   }
 
+  /**
+   *  Calling Api to add the posts
+   */
   addPost(title:string, content:string, image:string){
     const post: Post = {id: '', title: title, content: content, imageUrl: image};
     this.http
-    .post<{message: string, postId: string}>(`${this.baseurl}/posts`, post)
+    .post<{message: string, postId: string}>(`${this.baseurl}`, post)
     .subscribe( responseData => {
       const id = responseData.postId;
       post.id = id;
@@ -65,6 +80,9 @@ export class PostService {
     });
   }
 
+  /**
+   *  Calling Api to update the posts
+   */
   updatePost(id: string, title: string, content: string, image:string){
     const post: Post = {id: id, title: title, content: content, imageUrl: image};
     this.http.put(`${this.baseurl}/`+id, post)
@@ -78,6 +96,9 @@ export class PostService {
     })
   }
 
+  /**
+   *  Calling Api to delete the posts
+   */
   deletePost(postId: string){
     this.http.delete(`${this.baseurl}/` + postId)
     .subscribe(res => {

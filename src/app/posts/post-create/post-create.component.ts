@@ -10,21 +10,25 @@ import { Post } from 'src/app/models/posts.model';
   styleUrls: ['./post-create.component.css']
 })
 export class PostCreateComponent implements OnInit {
+
+  /**
+   *  Intializing the variables
+   */
   enteredTitle = '';
   enteredContent = '';
   isLoading = false;
   form!: FormGroup;
-  private mode = 'create';
+  mode = 'create';
   private postId: any;
   post: any;
-  imagePreview: any;
 
+  // Injecting the services to the constructor
   constructor(private postService: PostService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-
+    // Initilizing the form
     this.initializeForm();
-
+    // Getting the parameters values
     this.route.paramMap.subscribe((params: ParamMap) => {
       if(params.has('postId')){
         this.mode = 'edit';
@@ -41,6 +45,7 @@ export class PostCreateComponent implements OnInit {
             user: data.user
           }
 
+          // Setting the values in reactive form for edit method
           this.form.setValue({
             title: this.post.title,
             content: this.post.content,
@@ -54,14 +59,20 @@ export class PostCreateComponent implements OnInit {
     })
   }
 
+  /**
+   *  Initilizing the form controls
+   */
   initializeForm() {
     this.form = this.fb.group({
-      'title': new FormControl('', {validators: [Validators.required, Validators.minLength(3)]}),
+      'title': new FormControl('', {validators: [Validators.required]}),
       'content': new FormControl('', {validators: [Validators.required]}),
       'imageUrl': new FormControl('', {validators: [Validators.required]}),
     });
   }
 
+  /**
+   * Saving the posts
+   */
   onSavePost(){
     if(this.form.invalid){
       return ;

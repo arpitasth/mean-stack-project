@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+/**
+ * Schema For All the Posts
+ */
 const postSchema = mongoose.Schema({
 
   title: {

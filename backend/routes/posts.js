@@ -1,5 +1,5 @@
 const express = require('express');
-
+const router = express.Router();
 const {
   getPosts,
   addPost,
@@ -10,8 +10,9 @@ const {
 } = require('../controllers/PostsController');
 const { protectRoutes } = require('../middleware/auth');
 
-const router = express.Router();
-
+/**
+ * Routes For Posts CRUD operations
+ */
 router
   .route('')
     .get(getPosts)
@@ -25,6 +26,6 @@ router
 
 router
     .route('/my-posts/:id')
-      .get(protectRoutes, getPostsByUser)
+    .get(protectRoutes, getPostsByUser)
 
 module.exports = router;

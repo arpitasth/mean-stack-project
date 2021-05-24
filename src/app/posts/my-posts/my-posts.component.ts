@@ -11,7 +11,10 @@ import { PostService } from 'src/app/services/posts.service';
 })
 export class MyPostsComponent implements OnInit {
 
-  posts : any;
+  /**
+   *  Intializing the variables & create the subscription
+   */
+  posts : Post[] = [];
   userId: any;
   isAuthenticated: boolean = false;
   private postSubscription!: Subscription;
@@ -19,7 +22,11 @@ export class MyPostsComponent implements OnInit {
 
   constructor(private postService: PostService, private authService: AuthService) { }
 
-
+  /**
+   *  Getting All the posts.
+   *  Getting the user Id.
+   *  subscribe the request.
+   */
   ngOnInit(): void {
     this.postService.getPost();
     this.userId = this.authService.getUserId();
@@ -35,10 +42,16 @@ export class MyPostsComponent implements OnInit {
     });
   }
 
+  /**
+   * Deleting the post by calling post service
+   */
   onDeletePost(id: string){
     this.postService.deletePost(id);
   }
 
+  /**
+   * Unsubscribe all the subscriptions
+   */
   ngOnDestroy(){
     this.postSubscription.unsubscribe();
     this.authListener.unsubscribe();

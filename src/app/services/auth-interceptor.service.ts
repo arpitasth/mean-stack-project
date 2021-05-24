@@ -3,7 +3,9 @@ import { HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http"
 import { Injectable } from "@angular/core";
 
 @Injectable()
-
+/**
+ *  To intercept all the incoming requests
+ */
 export class AuthInterceptor implements HttpInterceptor{
 
   constructor(private authService: AuthService){}

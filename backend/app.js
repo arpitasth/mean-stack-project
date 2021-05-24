@@ -12,13 +12,19 @@ const errorHandler  = require('./middleware/error');
 connectDB();
 
 const app = express();
+
+/**
+ * Mount the routes
+ */
 const postRoutes = require('./routes/posts');
 const authRoutes = require('./routes/auth');
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+/**
+ * Setting Headers For the API's
+ */
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -33,11 +39,8 @@ app.use((req, res, next) => {
 });
 
 app.use(morgan('dev'));
-
 app.use('/api/auth',authRoutes);
 app.use('/api/posts',postRoutes);
-
-
 app.use(errorHandler);
 
 module.exports = app;

@@ -1,5 +1,3 @@
-import { ErrorComponent } from './error/error.component';
-import { AuthInterceptor } from './services/auth-interceptor.service';
 import { BrowserModule } from '@angular/platform-browser'
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,9 +26,11 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 import { AuthComponent } from './auth/auth.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-
-import { ErrorInterceptor } from './error-interceptor';
+import { ErrorComponent } from './error/error.component';
 import { MyPostsComponent } from './posts/my-posts/my-posts.component';
+
+import { AuthInterceptor } from './services/auth-interceptor.service';
+import { ErrorInterceptor } from './error-interceptor';
 
 @NgModule({
   declarations: [

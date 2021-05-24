@@ -1,5 +1,8 @@
 const ErrorResponse = require('../utils/errorResponse');
 
+/**
+ * @description: Custom Error Handler used to cast all types of errors
+ */
 const errorHandler = (err, req, res, next)=> {
     let error = { ...err };
     error.message = err.message;

@@ -11,6 +11,9 @@ import { Subscription } from 'rxjs';
 })
 export class PostListComponent implements OnInit {
 
+  /**
+   *  Initializing the variable & create subscription
+  */
   posts : Post[] = [];
   isLoading = false;
   userId: any;
@@ -18,15 +21,16 @@ export class PostListComponent implements OnInit {
   private postSubscription!: Subscription;
   private authListener : Subscription;
 
+  // Injecting the Services
   constructor(private postService: PostService, private authService: AuthService) { }
 
+  // Checking for posts & subscribing them
   ngOnInit(): void {
     this.isLoading = true;
     this.postService.getPost();
     this.userId = this.authService.getUserId();
     this.postSubscription = this.postService.getPostUpdateListener()
     .subscribe((posts: Post[]) => {
-      console.log(posts)
       this.isLoading = false;
       this.posts = posts;
     })
@@ -38,10 +42,9 @@ export class PostListComponent implements OnInit {
     });
   }
 
-  // onDeletePost(id: string){
-  //   this.postService.deletePost(id);
-  // }
-
+  /**
+   *  Unsubscribe all the subscriptions
+   */
   ngOnDestroy(){
     this.postSubscription.unsubscribe();
     this.authListener.unsubscribe();

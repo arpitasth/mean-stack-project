@@ -3,6 +3,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
+/**
+ *  Schema For Users
+ */
 const UserSchema = new mongoose.Schema({
     name: {
         type:String,
@@ -21,7 +24,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: [
             'user',
-            'publisher'
+            'admin'
         ],
         default: 'user'
     },

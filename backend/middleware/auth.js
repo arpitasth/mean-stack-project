@@ -3,7 +3,9 @@ const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const User = require('../models/User');
 
-// Protect Routes
+/**
+ *  @description : Check for authorized user
+ */
 exports.protectRoutes = asyncHandler( async (req, res, next)=>{
     let token;
     if(
@@ -14,12 +16,10 @@ exports.protectRoutes = asyncHandler( async (req, res, next)=>{
     } else if(req.cookies.token){
         token = req.cookies.token
     }
-
     // Make sure token exists
     if(!token){
         return next(new ErrorResponse(`Not Authorized To access this route`, 401));
     }
-
     try{
         const JWT_SECRET='hhavsfhfybnqwgeu61t76587yq3ekgukagbduitkjgfuyatn'
         const decode = jwt.verify(token, JWT_SECRET);
