@@ -16,6 +16,7 @@ export class MyPostsComponent implements OnInit {
    */
   posts : Post[] = [];
   userId: any;
+  isLoading = false;
   isAuthenticated: boolean = false;
   private postSubscription!: Subscription;
   private authListener : Subscription;
@@ -28,10 +29,12 @@ export class MyPostsComponent implements OnInit {
    *  subscribe the request.
    */
   ngOnInit(): void {
+    this.isLoading = true;
     this.postService.getPost();
     this.userId = this.authService.getUserId();
     this.postSubscription = this.postService.getPostByUserId(this.userId)
     .subscribe((posts: any) => {
+      this.isLoading = false;
       this.posts = posts.data.length > 0 ? posts.data : [];
     })
     this.isAuthenticated = this.authService.getAuth();

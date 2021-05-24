@@ -1,5 +1,6 @@
 <!-- Showing All the Posts -->
-<mat-accordion *ngIf="posts.length > 0">
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion *ngIf="posts.length > 0 && !isLoading">
   <mat-expansion-panel *ngFor="let post of posts;first as isFirst" [expanded]="isFirst">
     <mat-expansion-panel-header>
       <b>{{ post.title }}</b>
@@ -12,7 +13,7 @@
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
-<p class="mat-body-1 info-text" *ngIf="posts.length <=0 ">No Post Added Yet!</p>
+<p class="mat-body-1 info-text" *ngIf="posts.length <=0 && !isLoading">No Post Added Yet!</p>
 
 
 

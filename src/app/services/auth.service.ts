@@ -86,7 +86,6 @@ export class AuthService {
       this.isAuthenticated = true;
       this.authStatusListener.next(true);
     }
-
   }
 
   /**
