@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const config = require('../config/config');
 
 /**
  *  Schema For Users
@@ -54,17 +55,14 @@ UserSchema.pre('save', async function(next){
 
 // Sign JWT & return
 UserSchema.methods.getSignedJwtToken = function() {
-  const JWT_SECRET='hhavsfhfybnqwgeu61t76587yq3ekgukagbduitkjgfuyatn'
-  const JWT_EXPIRE='1h'
-    return jwt.sign({ id: this._id }, JWT_SECRET, {
-        expiresIn: JWT_EXPIRE
+    return jwt.sign({ id: this._id }, config.config.JWT_SECRET_KEY, {
+        expiresIn: config.config.JWT_EXPIRE
     })
 }
 
 // Match User Entered Password
 UserSchema.methods.matchPassword = async function(enteredPassword) {
     const values = await bcrypt.compare(enteredPassword, this.password);
-    console.log(values);
     return values;
 }
 

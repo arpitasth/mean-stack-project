@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const asyncHandler = require('./async');
 const ErrorResponse = require('../utils/errorResponse');
 const User = require('../models/User');
+const config = require('../config/config');
 
 /**
  *  @description : Check for authorized user
@@ -21,9 +22,7 @@ exports.protectRoutes = asyncHandler( async (req, res, next)=>{
         return next(new ErrorResponse(`Not Authorized To access this route`, 401));
     }
     try{
-        const JWT_SECRET='hhavsfhfybnqwgeu61t76587yq3ekgukagbduitkjgfuyatn'
-        const decode = jwt.verify(token, JWT_SECRET);
-        console.log(decode);
+        const decode = jwt.verify(token, config.config.JWT_SECRET_KEY);
         req.user = await User.findById(decode.id);
         next();
     }catch(err){

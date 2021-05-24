@@ -67,14 +67,11 @@ exports.logout = asyncHandler(async (req, res, next)=> {
 const sendTokenResponse = (user, statusCode, res) => {
     // Create Token
     const token = user.getSignedJwtToken();
-    const JWT_SECRET='hhavsfhfybnqwgeu61t76587yq3ekgukagbduitkjgfuyatn'
-    const JWT_EXPIRE='1h'
-    const JWT_COOKIE_EXPIRE='30'
     const options = {
-        expiresIn: Date.now() + JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000,
+        expiresIn: Date.now() + config.config.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000,
         httpOnly: true
     }
-    const decode = jwt.verify(token, JWT_SECRET);
+    const decode = jwt.verify(token, config.config.JWT_SECRET_KEY);
     return res
     .status(statusCode)
     .cookie('token', token, options)
@@ -82,7 +79,7 @@ const sendTokenResponse = (user, statusCode, res) => {
         success: true,
         token,
         user:decode.id,
-        expiresIn: JWT_EXPIRE
+        expiresIn:config.config.JWT_EXPIRE
     });
 }
 
