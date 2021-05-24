@@ -81,9 +81,12 @@ export class AuthService {
    */
   autoAuthUser(){
     const authInfo = this.getAuthData();
-    this.token = authInfo?.token;
-    this.isAuthenticated = true;
-    this.authStatusListener.next(true);
+    if(authInfo && authInfo.token && authInfo.user){
+      this.token = authInfo?.token;
+      this.isAuthenticated = true;
+      this.authStatusListener.next(true);
+    }
+
   }
 
   /**
