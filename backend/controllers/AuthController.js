@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const config = require('../config/config');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const jwt = require('jsonwebtoken');
@@ -65,8 +66,9 @@ const sendTokenResponse = (user, statusCode, res) => {
 
     /// Create Token
     const token = user.getSignedJwtToken();
+    console.log(token)
     const JWT_SECRET='hhavsfhfybnqwgeu61t76587yq3ekgukagbduitkjgfuyatn'
-    const JWT_EXPIRE='30d'
+    const JWT_EXPIRE='1h'
     const JWT_COOKIE_EXPIRE='30'
     const options = {
         expiresIn: Date.now() + JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000,
@@ -81,7 +83,8 @@ const sendTokenResponse = (user, statusCode, res) => {
     .json({
         success: true,
         token,
-        user:decode.id
+        user:decode.id,
+        expiresIn: JWT_EXPIRE
     });
 }
 

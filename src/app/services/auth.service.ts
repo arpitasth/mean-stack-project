@@ -36,6 +36,8 @@ export class AuthService {
       'http://localhost:3000/api/auth/register', userData)
       .subscribe(response => {
         console.log(response)
+        this.isAuthenticated = true;
+        this.authStatusListener.next(true);
         this.router.navigate(['/']);
       })
   }
@@ -49,8 +51,7 @@ export class AuthService {
         this.token = token;
         this.userId = response.user;
         if(token){
-          localStorage.setItem('token', token);
-          localStorage.setItem('user', response.user);
+          this.saveAuthData(token, this.userId);
           this.isAuthenticated = true;
           this.authStatusListener.next(true);
           this.router.navigate(['/']);
@@ -58,11 +59,42 @@ export class AuthService {
       })
   }
 
+  autoAuthUser(){
+    const authInfo = this.getAuthData();
+    this.token = authInfo?.token;
+    this.isAuthenticated = true;
+    this.authStatusListener.next(true);
+  }
+
   logout(){
     this.isAuthenticated = false;
-    localStorage.removeItem('token');
     this.authStatusListener.next(false);
+    this.clearAuthData();
     this.router.navigate(['/login']);
     this.userId = null;
+  }
+
+  private saveAuthData(token: string, user: string){
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', user);
+  }
+
+  private clearAuthData(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+
+  private getAuthData(){
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+
+    if(!token || !user){
+      return;
+    }
+
+    return {
+      token: token,
+      user: user
+    }
   }
 }

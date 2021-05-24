@@ -7,6 +7,7 @@ exports.addPost = asyncHandler(async(req, res, next) => {
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
+      imageUrl: req.body.imageUrl,
       user: req.user.id
     });
     await post.save()

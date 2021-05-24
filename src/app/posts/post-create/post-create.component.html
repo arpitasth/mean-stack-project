@@ -12,6 +12,19 @@
         Title is <strong>required</strong>
       </mat-error>
     </mat-form-field>
+
+    <mat-form-field>
+      <input matInput
+      type="text"
+      name="imageUrl"
+      formControlName="imageUrl"
+      placeholder ="Enter the image url"
+     >
+      <mat-error *ngIf="form.get('imageUrl').invalid">
+        Image Url is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
     <mat-form-field>
       <textarea
       matInput

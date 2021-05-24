@@ -37,12 +37,14 @@ export class PostCreateComponent implements OnInit {
             id: data._id,
             title: data.title,
             content: data.content,
+            imageUrl: data.imageUrl,
             user: data.user
           }
 
           this.form.setValue({
             title: this.post.title,
-            content: this.post.content
+            content: this.post.content,
+            imageUrl: this.post.imageUrl
           })
         });
       } else {
@@ -55,7 +57,8 @@ export class PostCreateComponent implements OnInit {
   initializeForm() {
     this.form = this.fb.group({
       'title': new FormControl('', {validators: [Validators.required, Validators.minLength(3)]}),
-      'content': new FormControl('', {validators: [Validators.required]})
+      'content': new FormControl('', {validators: [Validators.required]}),
+      'imageUrl': new FormControl('', {validators: [Validators.required]}),
     });
   }
 
@@ -65,9 +68,9 @@ export class PostCreateComponent implements OnInit {
     }
     this.isLoading = true;
     if(this.mode === 'create'){
-      this.postService.addPost(this.form.value.title, this.form.value.content);
+      this.postService.addPost(this.form.value.title, this.form.value.content, this.form.value.imageUrl);
     } else {
-      this.postService.updatePost(this.postId, this.form.value.title, this.form.value.content);
+      this.postService.updatePost(this.postId, this.form.value.title, this.form.value.content, this.form.value.imageUrl);
     }
     this.form.reset();
   }

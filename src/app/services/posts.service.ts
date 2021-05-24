@@ -12,17 +12,20 @@ export class PostService {
   posts: Post[] = [];
   private postUpdated = new Subject<Post[]>();
 
+  baseurl = "http://localhost:3000/api/posts"
+
   constructor(private http: HttpClient, private router: Router){}
 
   getPost() {
     this.http.get<{message: string, data: any}>(
-      'http://localhost:3000/api/posts'
+      `${this.baseurl}`
       ).pipe(map(postData => {
         return postData.data.map((post: any) => {
           return {
             title: post.title,
             content: post.content,
             id: post._id,
+            imageUrl: post.imageUrl,
             user: post.user
           }
         });
@@ -39,20 +42,20 @@ export class PostService {
 
   getPostById(id: string){
     return this.http.get<{_id:string, title:string, content: string }>(
-      'http://localhost:3000/api/posts/'+id
+      `${this.baseurl}/`+id
     );
   }
 
   getPostByUserId(userId: string){
     return this.http.get<{_id:string, title:string, content: string }>(
-      'http://localhost:3000/api/posts/my-posts/'+userId
+       `${this.baseurl}/my-posts/`+userId
     );
   }
 
-  addPost(title:string, content:string){
-    const post: Post = {id: '', title: title, content: content};
+  addPost(title:string, content:string, image:string){
+    const post: Post = {id: '', title: title, content: content, imageUrl: image};
     this.http
-    .post<{message: string, postId: string}>('http://localhost:3000/api/posts', post)
+    .post<{message: string, postId: string}>(`${this.baseurl}/posts`, post)
     .subscribe( responseData => {
       const id = responseData.postId;
       post.id = id;
@@ -62,9 +65,9 @@ export class PostService {
     });
   }
 
-  updatePost(id: string, title: string, content: string){
-    const post: Post = {id: id, title: title, content: content};
-    this.http.put('http://localhost:3000/api/posts/'+id, post)
+  updatePost(id: string, title: string, content: string, image:string){
+    const post: Post = {id: id, title: title, content: content, imageUrl: image};
+    this.http.put(`${this.baseurl}/`+id, post)
     .subscribe( response => {
       const updatedPosts = [...this.posts];
       const findUpdatedIndex = updatedPosts.findIndex(p => p.id === id);
@@ -76,7 +79,7 @@ export class PostService {
   }
 
   deletePost(postId: string){
-    this.http.delete('http://localhost:3000/api/posts/' + postId)
+    this.http.delete(`${this.baseurl}/` + postId)
     .subscribe(res => {
       if(res){
         const updatedPosts = this.posts.filter(post =>{

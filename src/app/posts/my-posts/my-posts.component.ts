@@ -25,7 +25,7 @@ export class MyPostsComponent implements OnInit {
     this.userId = this.authService.getUserId();
     this.postSubscription = this.postService.getPostByUserId(this.userId)
     .subscribe((posts: any) => {
-      this.posts = posts.data;
+      this.posts = posts.data.length > 0 ? posts.data : [];
     })
     this.isAuthenticated = this.authService.getAuth();
     this.authListener = this.authService.getAuthStatus()

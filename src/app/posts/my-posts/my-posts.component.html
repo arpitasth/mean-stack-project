@@ -3,7 +3,8 @@
     <mat-expansion-panel-header>
       <b>{{ post.title }}</b>
     </mat-expansion-panel-header>
-    <p>{{ post.content }}</p>
+    <img src="{{ post.imageUrl }}" alt="{{ post.title }}">
+    <p><i>{{ post.content }}</i></p>
     <mat-action-row>
         <a mat-button color="primary" [routerLink]="['edit', post._id]">EDIT</a>
         <button mat-button color="primary" (click)="onDeletePost(post._id)">DELETE</button>

@@ -31,8 +31,6 @@ const UserSchema = new mongoose.Schema({
         min: 6,
         select: false
     },
-    resetPasswordToken: String,
-    resetPasswordExpiration: Date,
     createdAt: {
         type: Date,
         default: Date.now()
@@ -67,28 +65,5 @@ UserSchema.methods.matchPassword = async function(enteredPassword) {
     return values;
 }
 
-// Generate & Hash Password Token
-UserSchema.methods.getResetPasswordToken = function() {
-    // Generate Token
-    const resetToken = crypto.randomBytes(20).toString('hex');
-
-    this.resetPasswordToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
-
-    //Expire Time
-    this.resetPasswordExpiration = Date.now() + 10 * 60 * 1000;
-
-    return resetToken;
-}
-
-// Reverse populate with Virtuals
-UserSchema.virtual('post', {
-    ref: 'Post',
-    localField: '_id',
-    foreignField: 'user',
-    justOne: false,
-})
 
 module.exports = mongoose.model('User', UserSchema);

@@ -26,6 +26,7 @@ export class PostListComponent implements OnInit {
     this.userId = this.authService.getUserId();
     this.postSubscription = this.postService.getPostUpdateListener()
     .subscribe((posts: Post[]) => {
+      console.log(posts)
       this.isLoading = false;
       this.posts = posts;
     })
