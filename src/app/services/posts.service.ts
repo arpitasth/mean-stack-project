@@ -22,7 +22,8 @@ export class PostService {
           return {
             title: post.title,
             content: post.content,
-            id: post._id
+            id: post._id,
+            user: post.user
           }
         });
       }))
@@ -39,6 +40,12 @@ export class PostService {
   getPostById(id: string){
     return this.http.get<{_id:string, title:string, content: string }>(
       'http://localhost:3000/api/posts/'+id
+    );
+  }
+
+  getPostByUserId(userId: string){
+    return this.http.get<{_id:string, title:string, content: string }>(
+      'http://localhost:3000/api/posts/my-posts/'+userId
     );
   }
 
@@ -77,6 +84,7 @@ export class PostService {
         });
         this.posts = updatedPosts;
         this.postUpdated.next([...this.posts]);
+        this.router.navigate(['/']);
       }
     })
   }

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private token: string | undefined ;
   private isAuthenticated: boolean = false;
+  private userId: any;
   private authStatusListener = new Subject<boolean>();
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -25,6 +26,10 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  getUserId(){
+    return localStorage.getItem('user');
+  }
+
   getSignUp(email: any, password: any) {
     const userData = { email: email, password: password}
     this.http.post<Auth>(
@@ -37,13 +42,15 @@ export class AuthService {
 
   getLogIn(email: any, password: any){
     const userData = { email: email, password: password}
-    this.http.post<{token: string, message: string}>(
+    this.http.post<{token: string, message: string, user: string}>(
       'http://localhost:3000/api/auth/login', userData)
       .subscribe(response => {
         const token = response.token;
         this.token = token;
+        this.userId = response.user;
         if(token){
           localStorage.setItem('token', token);
+          localStorage.setItem('user', response.user);
           this.isAuthenticated = true;
           this.authStatusListener.next(true);
           this.router.navigate(['/']);
@@ -55,6 +62,7 @@ export class AuthService {
     this.isAuthenticated = false;
     localStorage.removeItem('token');
     this.authStatusListener.next(false);
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
+    this.userId = null;
   }
 }

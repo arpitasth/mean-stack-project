@@ -1,18 +1,17 @@
-import { AuthService } from './../../services/auth.service';
-import { PostService } from './../../services/posts.service';
-import { Component, OnInit, Input } from '@angular/core';
-import { Post } from '../../models/posts.model';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Post } from 'src/app/models/posts.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { PostService } from 'src/app/services/posts.service';
 
 @Component({
-  selector: 'app-post-list',
-  templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.css']
+  selector: 'app-my-posts',
+  templateUrl: './my-posts.component.html',
+  styleUrls: ['./my-posts.component.css']
 })
-export class PostListComponent implements OnInit {
+export class MyPostsComponent implements OnInit {
 
-  posts : Post[] = [];
-  isLoading = false;
+  posts : any;
   userId: any;
   isAuthenticated: boolean = false;
   private postSubscription!: Subscription;
@@ -20,14 +19,13 @@ export class PostListComponent implements OnInit {
 
   constructor(private postService: PostService, private authService: AuthService) { }
 
+
   ngOnInit(): void {
-    this.isLoading = true;
     this.postService.getPost();
     this.userId = this.authService.getUserId();
-    this.postSubscription = this.postService.getPostUpdateListener()
-    .subscribe((posts: Post[]) => {
-      this.isLoading = false;
-      this.posts = posts;
+    this.postSubscription = this.postService.getPostByUserId(this.userId)
+    .subscribe((posts: any) => {
+      this.posts = posts.data;
     })
     this.isAuthenticated = this.authService.getAuth();
     this.authListener = this.authService.getAuthStatus()
@@ -37,12 +35,13 @@ export class PostListComponent implements OnInit {
     });
   }
 
-  // onDeletePost(id: string){
-  //   this.postService.deletePost(id);
-  // }
+  onDeletePost(id: string){
+    this.postService.deletePost(id);
+  }
 
   ngOnDestroy(){
     this.postSubscription.unsubscribe();
     this.authListener.unsubscribe();
   }
+
 }

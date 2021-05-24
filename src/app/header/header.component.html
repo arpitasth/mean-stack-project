@@ -5,6 +5,9 @@
     <li *ngIf="isAuthenticated">
       <a mat-button [routerLink]="['create']" routerLinkActive="mat-accent">New Post</a>
     </li>
+    <li *ngIf="isAuthenticated">
+      <a mat-button [routerLink]="['my-posts']" routerLinkActive="mat-accent">Your Posts</a>
+    </li>
     <li *ngIf="!isAuthenticated">
       <a mat-button [routerLink]="['signup']" routerLinkActive="mat-accent">Signup</a>
     </li>

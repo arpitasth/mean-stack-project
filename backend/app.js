@@ -5,6 +5,7 @@ const colors = require('colors');
 const morgan = require('morgan');
 
 const connectDB = require('./config/database');
+const config = require('./config/config');
 const errorHandler  = require('./middleware/error');
 
 // Connect DB

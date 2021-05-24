@@ -1,21 +1,14 @@
 const Post = require('../models/Post');
 const asyncHandler = require('../middleware/async');
+const ErrorResponse = require('../utils/errorResponse');
 
 exports.addPost = asyncHandler(async(req, res, next) => {
-
-    let postPictures;
-      if(req.files.length > 0){
-        postPictures = req.files.map(file => {
-              return { img: file.filename }
-          })
-      }
 
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
-      postPictures
+      user: req.user.id
     });
-
     await post.save()
 
     res.status(200).json({
@@ -57,9 +50,9 @@ exports.updatePost = asyncHandler(async(req, res, next) => {
     }
 
     //Make Sure User is Post owner
-    // if(post.user.toString() !== req.user.id && req.user.role !== 'admin'){
-    //     return  next(new ErrorResponse(`User is not authorize to update this post`, 401));
-    // }
+    if(post.user.toString() !== req.user.id && req.user.role !== 'admin'){
+        return  next(new ErrorResponse(`User is not authorize to update this post`, 401));
+    }
 
     post = await Post.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
@@ -81,15 +74,30 @@ exports.deletePost = asyncHandler(async(req, res, next)=> {
     }
 
     // Make Sure User is Post owner
-    // if(post.user.toString() !== req.user.id && req.user.role !== 'admin'){
-    //     return  next(new ErrorResponse(`User is not authorize to update this post`, 401));
-    // }
+    if(post.user.toString() !== req.user.id && req.user.role !== 'admin'){
+        return  next(new ErrorResponse(`User is not authorize to update this post`, 401));
+    }
 
     await post.remove();
 
     res.status(200).json({
         status: true,
         message: `Post Deleted Successfully!!`
+    });
+});
+
+exports.getPostsByUser = asyncHandler(async(req, res, next)=> {
+
+  const post = await Post.find({user:req.params.id});
+
+    if(!post){
+        return  next(new ErrorResponse(`Post not found with this user id: ${req.user.id}`, 404));
+    }
+
+    res.status(200).json({
+        status: true,
+        data: post,
+        message: `Post Fetched Successfully!!`
     });
 });
 

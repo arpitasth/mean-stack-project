@@ -17,11 +17,13 @@ exports.protectRoutes = asyncHandler( async (req, res, next)=>{
 
     // Make sure token exists
     if(!token){
+      console.log('in')
         return next(new ErrorResponse(`Not Authorized To access this route`, 401));
     }
 
     try{
-        const decode = jwt.verify(token, process.env.JWT_SECRET);
+        const JWT_SECRET='hhavsfhfybnqwgeu61t76587yq3ekgukagbduitkjgfuyatn'
+        const decode = jwt.verify(token, JWT_SECRET);
         console.log(decode);
         req.user = await User.findById(decode.id);
         next();

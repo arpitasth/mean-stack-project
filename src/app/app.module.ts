@@ -1,3 +1,4 @@
+import { ErrorComponent } from './error/error.component';
 import { AuthInterceptor } from './services/auth-interceptor.service';
 import { BrowserModule } from '@angular/platform-browser'
 import { NgModule } from '@angular/core';
@@ -17,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatDialogModule} from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { PostsComponent } from './posts/posts.component';
@@ -26,6 +28,9 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 import { AuthComponent } from './auth/auth.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
+
+import { ErrorInterceptor } from './error-interceptor';
+import { MyPostsComponent } from './posts/my-posts/my-posts.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +42,8 @@ import { SignupComponent } from './auth/signup/signup.component';
     AuthComponent,
     LoginComponent,
     SignupComponent,
+    ErrorComponent,
+    MyPostsComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +61,7 @@ import { SignupComponent } from './auth/signup/signup.component';
     MatSidenavModule,
     MatIconModule,
     MatDividerModule,
+    MatDialogModule,
     HttpClientModule
   ],
   providers: [
@@ -61,8 +69,14 @@ import { SignupComponent } from './auth/signup/signup.component';
       provide : HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ErrorComponent]
 })
 export class AppModule { }

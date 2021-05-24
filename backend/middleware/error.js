@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const errorHandler = (err, req, res, next)=> {
     let error = { ...err };
     error.message = err.message;
-
+    console.log(error)
     // Mongoose Object Id
     if(err.name === 'CastError'){
         const message = `Resource not found with id: ${error.value}`
@@ -12,7 +12,7 @@ const errorHandler = (err, req, res, next)=> {
 
     // Mongoose Duplicate Key
     if(err.code === 11000){
-        const message = `Duplicate field value entered`;
+        const message = `Email already exists`;
         error = new ErrorResponse(message, 404);
     }
 

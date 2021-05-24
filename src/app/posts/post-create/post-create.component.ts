@@ -3,7 +3,6 @@ import { PostService } from './../../services/posts.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { Post } from 'src/app/models/posts.model';
-// import { mimeType } from './mime-type.validator';
 
 @Component({
   selector: 'app-post-create',
@@ -37,7 +36,8 @@ export class PostCreateComponent implements OnInit {
           this.post = {
             id: data._id,
             title: data.title,
-            content: data.content
+            content: data.content,
+            user: data.user
           }
 
           this.form.setValue({
@@ -55,21 +55,9 @@ export class PostCreateComponent implements OnInit {
   initializeForm() {
     this.form = this.fb.group({
       'title': new FormControl('', {validators: [Validators.required, Validators.minLength(3)]}),
-      'content': new FormControl('', {validators: [Validators.required]}),
-      //'image': new FormControl('', {validators: [Validators.required]})
+      'content': new FormControl('', {validators: [Validators.required]})
     });
   }
-
-  // onImagePicked(event: Event) {
-  //   const file = (event.target as HTMLInputElement).files[0];
-  //   this.form.patchValue({image: file});
-  //   this.form.get('image').updateValueAndValidity();
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     this.imagePreview = reader.result;
-  //   }
-  //   reader.readAsDataURL(file);
-  // }
 
   onSavePost(){
     if(this.form.invalid){

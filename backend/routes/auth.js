@@ -25,25 +25,5 @@ router
     .route('/login')
     .post(loginUser);
 
-router
-    .route('/logout')
-    .get(logout);
-
-router
-    .route('/me')
-    .get(protectRoutes, getCurrentUser)
-    .put(protectRoutes, updateCurrentUserDetails);
-
-router
-    .route('/me/user-password')
-    .put(protectRoutes, updateCurrentPassword);
-
-router
-    .route('/forgot-password')
-    .post(getForgotPassword);
-
-router
-    .route('/resetPassword/:resetPasswordToken')
-    .put(resetPassword);
 
 module.exports  = router;
