@@ -24,6 +24,6 @@ server.listen(
   console.log(`Server is running in development on port ${port}`.yellow.bold)
 );
 
-
+module.exports = server;
 
 
